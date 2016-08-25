@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.app.Activity;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     Button mButton;
     //ListView取得
     ListView mListView;
+    //取得物入れ
+    String mImte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
         });
         //Adapterのセット
         mListView.setAdapter(mAdapter);
+        //List項目のタッチ処理
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListView = (ListView)parent;
+                mImte = (String)mListView.getItemAtPosition(position);
+                mAdapter = (ArrayAdapter<String>)mListView.getAdapter();
+                mAdapter.remove(mImte);
+            }
+        });
     }
 
     //更新処理
