@@ -23,41 +23,46 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> mAdapter;
+    //EditText取得
+    EditText mEditText;
+    //ボタン取得
+    Button mButton;
+    //ListView取得
+    ListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mEditText = (EditText)findViewById(R.id.edittext);
+        mButton = (Button)findViewById(R.id.button);
+        mListView = (ListView)findViewById(R.id.listview);
         setSupportActionBar(toolbar);
-        //ボタン取得
-        final Button button = (Button)findViewById(R.id.button);
-        //ListView取得
-        final ListView listview = (ListView)findViewById(R.id.listview);
         //ArrayAdapterの生成
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
-
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         //buttonにクリックイベントを設定
-        button.setOnClickListener(new View.OnClickListener() {
+        mButton.setOnClickListener(new View.OnClickListener() {
             //押した時の処理
             @Override
             public void onClick(View view) {
-                //データ追加
-                addStringData();
-                Log.d("button","puhs");
+                //空白じゃなければ
+                if(mEditText.length() != 0) {
+                    //データ追加
+                    addStringData();
+                }
             }
         });
         //Adapterのセット
-        listview.setAdapter(adapter);
+        mListView.setAdapter(mAdapter);
     }
 
     //更新処理
-    private void addStringData() {
-        //EditText取得
-        final EditText editText = (EditText) findViewById(R.id.edittext);
+    public void addStringData() {
         //EditTextのテキストを取得
-        adapter.add(editText.getText().toString());
+        mAdapter.add(mEditText.getText().toString());
         //EditTextの中身の削除
-        editText.getEditableText().clear();
+        mEditText.getEditableText().clear();
     }
 }
