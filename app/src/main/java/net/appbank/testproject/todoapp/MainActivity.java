@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     EditText mEditText;
     //ボタン取得
     Button mButton;
-    // 取得物入れ
-    String mItem;
     int mLast;
     ItemAdapter mAdapter;
     ListView mListView;
@@ -48,32 +46,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        mEditText = (EditText)findViewById(R.id.edittext);
-        mButton = (Button)findViewById(R.id.button);
         setSupportActionBar(toolbar);
+        //EditText取得
+        mEditText = (EditText)findViewById(R.id.edittext);
+        //mButton取得
+        mButton = (Button)findViewById(R.id.button);
+        //mListView取得
         mListView = (ListView)findViewById(R.id.listview);
-        mList.add(new Item("hoge", "hoge", null));
         //ArrayAdapterの生成
         mAdapter = new ItemAdapter(this, mList);
+        //listにadapterをセット
         mListView.setAdapter(mAdapter);
+        //dateの作成
         mDate = new Date(System.currentTimeMillis());
+        //フォント(適応されてないので見直し)
         mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'kk'時'mm'分'ss'秒'");
+        //テストデータ
+        mList.add(new Item("hoge", "hoge", mDate.toString()));
         //buttonにクリックイベントを設定
         mButton.setOnClickListener(new View.OnClickListener() {
             //押した時の処理
             @Override
             public void onClick(View view) {
                 //空白じゃなければ
-                Log.d("button","hoge");
                 if(mEditText.getText().toString().length() != 0) {
+                    //日時の更新
+                    mDate.setTime(System.currentTimeMillis());
                     //データ追加
-                    Log.d("button","hoge");
                     addStringData();
                     //アダプターの数を入れる
                     mLast = mAdapter.getCount();
                     //mLast(追加した一番新しいもの)の位置に移動させる
-                   mListView.setSelection(mLast);
+                    mListView.setSelection(mLast);
                 }
             }
         });
@@ -81,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
     //更新処理
     private void addStringData() {
         //EditTextのテキストを取得
-        mList.add(new Item("test", mEditText.getText().toString(), mDate));
+        mList.add(new Item("test", mEditText.getText().toString(), mDate.toString()));
+        //更新の反映
         mAdapter.notifyDataSetChanged();
         //EditTextの中身の削除
         mEditText.getEditableText().clear();
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             TextView textTextView = (TextView)convertView.findViewById(R.id.text);
             nameTextView.setText(getItem(position).getName());
             textTextView.setText(getItem(position).getText());
-            dateTextView.setText(mSimpleDateFormat.format(mDate));
+            dateTextView.setText(getItem(position).getDate());
             return convertView;
         }
 
