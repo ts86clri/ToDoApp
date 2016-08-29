@@ -60,15 +60,15 @@ public class MainActivity extends AppCompatActivity {
         //dateの作成
         mDate = new Date(System.currentTimeMillis());
         //フォント
-        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
+        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm:ss");
         //テストデータ
-        mList.add(new Item("hoge", "hoge", mDate.toString()));
+        mList.add(new Item("hoge", "hoge", mSimpleDateFormat.format(mDate)));
         //buttonにクリックイベントを設定
         mButton.setOnClickListener(new View.OnClickListener() {
             //押した時の処理
             @Override
             public void onClick(View view) {
-                //空白じゃなければ
+                //空白じゃなければß
                 if(mEditText.getText().toString().length() != 0) {
                     //日時の更新
                     mDate.setTime(System.currentTimeMillis());
