@@ -16,12 +16,10 @@ public class Item {
         this.date = date;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public String getText() {
-        return text;
-    }
+    public String getText() {return text;}
+
+
 
 }
