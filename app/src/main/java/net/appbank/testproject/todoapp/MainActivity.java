@@ -1,6 +1,8 @@
 package net.appbank.testproject.todoapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     ListView mListView;
     Date mDate;
     SimpleDateFormat mSimpleDateFormat;
+    Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +68,17 @@ public class MainActivity extends AppCompatActivity {
         mDate = new Date(System.currentTimeMillis());
         //フォント
         mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
+        mIntent = new Intent(MainActivity.this,EditActivity.class);
         //テストデータ
         mList.add(new Item("hoge", "hoge", mSimpleDateFormat.format(mDate)));
 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View convertView, int position, long id) {
-                Log.d("tap","ok");
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //isChecked = mListView.isItemChecked(position);
+                mList.get(position).setIsCheck(!mList.get(position).getIsCheck());
+                mAdapter.notifyDataSetChanged();
 
             }
         });
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("log","ok");
+                startActivity(mIntent);
                 return false;
             }
         });
@@ -131,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
             nameTextView.setText(getItem(position).getName());
             textTextView.setText(getItem(position).getText());
             dateTextView.setText(getItem(position).getDate());
+            if(getItem(position).getIsCheck()) {
+                nameTextView.setTextColor(getResources().getColor(R.color.textColor));
+                dateTextView.setTextColor(getResources().getColor(R.color.textColor));
+                textTextView.setTextColor(getResources().getColor(R.color.textColor));
+            }else {
+                nameTextView.setTextColor(getResources().getColor(R.color.black));
+                dateTextView.setTextColor(getResources().getColor(R.color.black));
+                textTextView.setTextColor(getResources().getColor(R.color.black));
+            }
             return convertView;
         }
 
