@@ -8,11 +8,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.button);
         //mListView取得
         mListView = (ListView)findViewById(R.id.listview);
+        mListView.setChoiceMode(mListView.CHOICE_MODE_MULTIPLE);
         //ArrayAdapterの生成
         mAdapter = new ItemAdapter(this, mList);
         //listにadapterをセット
@@ -60,15 +64,33 @@ public class MainActivity extends AppCompatActivity {
         //dateの作成
         mDate = new Date(System.currentTimeMillis());
         //フォント
-        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm:ss");
+        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
         //テストデータ
         mList.add(new Item("hoge", "hoge", mSimpleDateFormat.format(mDate)));
+
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View convertView, int position, long id) {
+                Log.d("tap","ok");
+
+            }
+        });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.d("log","ok");
+                return false;
+            }
+        });
+
         //buttonにクリックイベントを設定
         mButton.setOnClickListener(new View.OnClickListener() {
             //押した時の処理
             @Override
             public void onClick(View view) {
-                //空白じゃなければß
+                //空白じゃなければ
                 if(mEditText.getText().toString().length() != 0) {
                     //日時の更新
                     mDate.setTime(System.currentTimeMillis());
