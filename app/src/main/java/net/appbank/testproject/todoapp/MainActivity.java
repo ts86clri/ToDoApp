@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
         //dateの作成
         mDate = new Date(System.currentTimeMillis());
-        //フォント(適応されてないので見直し)
-        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'kk'時'mm'分'ss'秒'");
+        //フォント
+        mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
         //テストデータ
         mList.add(new Item("hoge", "hoge", mDate.toString()));
         //buttonにクリックイベントを設定
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     //更新処理
     private void addStringData() {
         //EditTextのテキストを取得
-        mList.add(new Item("test", mEditText.getText().toString(), mDate.toString()));
+        mList.add(new Item("test", mEditText.getText().toString(), mSimpleDateFormat.format(mDate)));
         //更新の反映
         mAdapter.notifyDataSetChanged();
         //EditTextの中身の削除
