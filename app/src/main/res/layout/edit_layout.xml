@@ -17,5 +17,32 @@
         android:id="@+id/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/RadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/CheckBoxWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckBox_white"/>
+        <CheckBox
+            android:id="@+id/CheckBoxRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckBox_red"/>
+        <CheckBox
+            android:id="@+id/CheckBoxBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckBox_blue"/>
+        <CheckBox
+            android:id="@+id/CheckBoxYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckBox_yellow"/>
+
+    </LinearLayout>
 
 </LinearLayout>
