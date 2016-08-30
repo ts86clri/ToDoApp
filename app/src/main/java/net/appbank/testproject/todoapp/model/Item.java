@@ -18,6 +18,9 @@ public class Item {
         this.isCheck = false;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
     public void setIsCheck(Boolean isCheck){
         this.isCheck = isCheck;
     }

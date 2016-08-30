@@ -1,5 +1,6 @@
 package net.appbank.testproject.todoapp;
 
+import android.accessibilityservice.GestureDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat mSimpleDateFormat;
     //遷移の取得
     Intent mIntent;
+    static final  int RESULT_EDITACTIVITY = 100;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("log","ok");
-                mIntent.putExtra("data",mList.get(position).getText());
-                int requestCode = 100;
+                mIntent.putExtra("data", mList.get(position).getText());
+                mIntent.putExtra("position", position);
+                int requestCode = RESULT_EDITACTIVITY;
                 startActivityForResult(mIntent,requestCode);
                 return false;
             }
         });
-
         //buttonにクリックイベントを設定
         mButton.setOnClickListener(new View.OnClickListener() {
             //押した時の処理
@@ -129,6 +133,19 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
         //EditTextの中身の削除
         mEditText.getEditableText().clear();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String res;
+        int pos;
+        if (resultCode == RESULT_OK && requestCode == RESULT_EDITACTIVITY && null != data) {
+            res = data.getStringExtra("RESULT");
+            pos = data.getIntExtra("position", 0);
+            mList.get(pos).setText(res);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public class ItemAdapter extends ArrayAdapter<Item> {
@@ -160,9 +177,5 @@ public class MainActivity extends AppCompatActivity {
             }
             return convertView;
         }
-        protected void onActionResult(int requestCode, int resultCode, Intent mIntent) {
-            mAdapter.onActionResult(requestCode,resultCode,mIntent);
-        }
-
     }
 }

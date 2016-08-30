@@ -28,8 +28,12 @@ public class EditActivity extends AppCompatActivity {
     CheckBox mCheckBoxBlue;
     CheckBox mCheckBoxYellow;
     CheckBox mCheckBoxWhite;
+    Button mSaveButton;
     int ActionId;
     String data;
+    int mPosition;
+    static final  int RESULT_EDITACTIVITY = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,9 @@ public class EditActivity extends AppCompatActivity {
         mCheckBoxYellow = (CheckBox) findViewById(R.id.CheckBoxYellow);
         mIntent = getIntent();
         data = mIntent.getStringExtra("data");
+        mPosition = mIntent.getIntExtra("position",0);
         mEditText.setText(data);
+        mSaveButton = (Button) findViewById(R.id.SaveButton);
         mCheckBoxWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +95,16 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mIntent.putExtra("RESULT", mEditText.getText().toString());
+                mIntent.putExtra("position",mPosition);
+                setResult(RESULT_OK, mIntent);
+
+                finish();
+            }
+        });
     }
 
     public  boolean onOptionsItemSelected(MenuItem item) {
@@ -103,5 +119,6 @@ public class EditActivity extends AppCompatActivity {
         }
         return  result;
     }
+
 
 }
