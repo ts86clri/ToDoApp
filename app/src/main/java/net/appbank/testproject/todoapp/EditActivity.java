@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,35 +20,30 @@ import android.widget.Toast;
  * Created by tatsuya.sato on 2016/08/29.
  */
 public class EditActivity extends AppCompatActivity {
-    TextView mTextView;
     EditText mEditText;
-    Button mButton;
     Intent mIntent;
     CheckBox mCheckBoxRed;
     CheckBox mCheckBoxBlue;
     CheckBox mCheckBoxYellow;
     CheckBox mCheckBoxWhite;
-    private Boolean isCheckWhite;
-    private Boolean isCheckRed;
-    private Boolean isCheckBlue;
-    private Boolean isCheckYellow;
+    int ActionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_layout);
-        mTextView = (TextView)findViewById(R.id.test);
-        mEditText = (EditText)findViewById(R.id.edittext);
-        mButton = (Button) findViewById(R.id.button);
-        mIntent = new Intent(EditActivity.this,MainActivity.class);
-        mCheckBoxWhite = (CheckBox)findViewById(R.id.CheckBoxWhite);
-        mCheckBoxRed = (CheckBox)findViewById(R.id.CheckBoxRed);
-        mCheckBoxBlue = (CheckBox)findViewById(R.id.CheckBoxBlue);
-        mCheckBoxYellow = (CheckBox)findViewById(R.id.CheckBoxYellow);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mEditText = (EditText) findViewById(R.id.edittext);
+        mIntent = new Intent(EditActivity.this, MainActivity.class);
+        mCheckBoxWhite = (CheckBox) findViewById(R.id.CheckBoxWhite);
+        mCheckBoxRed = (CheckBox) findViewById(R.id.CheckBoxRed);
+        mCheckBoxBlue = (CheckBox) findViewById(R.id.CheckBoxBlue);
+        mCheckBoxYellow = (CheckBox) findViewById(R.id.CheckBoxYellow);
 
         mCheckBoxWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mCheckBoxWhite.isChecked()==true) {
+                if (mCheckBoxWhite.isChecked() == true) {
                     mCheckBoxRed.setChecked(false);
                     mCheckBoxBlue.setChecked(false);
                     mCheckBoxYellow.setChecked(false);
@@ -88,12 +84,19 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
         });
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
+
+    public  boolean onOptionsItemSelected(MenuItem item) {
+        ActionId = item.getItemId();
+        boolean result = true;
+        switch (ActionId){
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                result = super.onOptionsItemSelected(item);
+        }
+        return  result;
+    }
+
 }
