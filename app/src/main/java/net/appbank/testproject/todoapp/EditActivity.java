@@ -1,8 +1,10 @@
 package net.appbank.testproject.todoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +29,7 @@ public class EditActivity extends AppCompatActivity {
     CheckBox mCheckBoxYellow;
     CheckBox mCheckBoxWhite;
     int ActionId;
+    String data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +42,9 @@ public class EditActivity extends AppCompatActivity {
         mCheckBoxRed = (CheckBox) findViewById(R.id.CheckBoxRed);
         mCheckBoxBlue = (CheckBox) findViewById(R.id.CheckBoxBlue);
         mCheckBoxYellow = (CheckBox) findViewById(R.id.CheckBoxYellow);
-
+        mIntent = getIntent();
+        data = mIntent.getStringExtra("data");
+        mEditText.setText(data);
         mCheckBoxWhite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

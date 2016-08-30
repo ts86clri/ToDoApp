@@ -2,9 +2,11 @@ package net.appbank.testproject.todoapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Debug;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat mSimpleDateFormat;
     //遷移の取得
     Intent mIntent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mDate = new Date(System.currentTimeMillis());
         //フォント
         mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
+        //遷移の準備
         mIntent = new Intent(MainActivity.this,EditActivity.class);
         //テストデータ
         mList.add(new Item("hoge", "hoge", mSimpleDateFormat.format(mDate)));
@@ -93,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("log","ok");
-                startActivity(mIntent);
+                mIntent.putExtra("data",mList.get(position).getText());
+                int requestCode = 100;
+                startActivityForResult(mIntent,requestCode);
                 return false;
             }
         });
@@ -155,6 +159,9 @@ public class MainActivity extends AppCompatActivity {
                 textTextView.setTextColor(getResources().getColor(R.color.black));
             }
             return convertView;
+        }
+        protected void onActionResult(int requestCode, int resultCode, Intent mIntent) {
+            mAdapter.onActionResult(requestCode,resultCode,mIntent);
         }
 
     }
