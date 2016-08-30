@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat mSimpleDateFormat;
     //遷移の取得
     Intent mIntent;
+    Color mColor;
     static final  int RESULT_EDITACTIVITY = 100;
 
 
@@ -82,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
         mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
         //遷移の準備
         mIntent = new Intent(MainActivity.this,EditActivity.class);
+
         //テストデータ
-        mList.add(new Item("hoge", "hoge", mSimpleDateFormat.format(mDate)));
+        mList.add(new Item("hoge", mSimpleDateFormat.format(mDate)));
         //リストのアイテムを押した時の処理
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     //更新処理
     private void addStringData() {
         //EditTextのテキストを取得
-        mList.add(new Item("test", mEditText.getText().toString(), mSimpleDateFormat.format(mDate)));
+        mList.add(new Item(mEditText.getText().toString(), mSimpleDateFormat.format(mDate)));
         //更新の反映
         mAdapter.notifyDataSetChanged();
         //EditTextの中身の削除
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             res = data.getStringExtra("RESULT");
             pos = data.getIntExtra("position", 0);
             mList.get(pos).setText(res);
+
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -159,20 +162,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             convertView = mInflater.inflate(R.layout.item_layout, parent, false);
-            TextView nameTextView = (TextView)convertView.findViewById(R.id.name);
             TextView dateTextView = (TextView)convertView.findViewById(R.id.date);
             TextView textTextView = (TextView)convertView.findViewById(R.id.text);
-            nameTextView.setText(getItem(position).getName());
             textTextView.setText(getItem(position).getText());
             dateTextView.setText(getItem(position).getDate());
             //押されたなら文字色を変える
             if(getItem(position).getIsCheck()) {
-                nameTextView.setTextColor(getResources().getColor(R.color.textColor));
                 dateTextView.setTextColor(getResources().getColor(R.color.textColor));
                 textTextView.setTextColor(getResources().getColor(R.color.textColor));
             }else {
-                nameTextView.setTextColor(getResources().getColor(R.color.black));
-                dateTextView.setTextColor(getResources().getColor(R.color.black));
+                dateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                 textTextView.setTextColor(getResources().getColor(R.color.black));
             }
             return convertView;

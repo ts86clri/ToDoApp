@@ -99,14 +99,14 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mIntent.putExtra("RESULT", mEditText.getText().toString());
-                mIntent.putExtra("position",mPosition);
+                mIntent.putExtra("position", mPosition);
                 setResult(RESULT_OK, mIntent);
-
                 finish();
             }
         });
     }
 
+    @Override
     public  boolean onOptionsItemSelected(MenuItem item) {
         ActionId = item.getItemId();
         boolean result = true;
