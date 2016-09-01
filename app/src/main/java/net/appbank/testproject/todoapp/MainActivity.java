@@ -101,8 +101,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("log","ok");
+                //現在のテキストをEdit_Activityに送る
                 mIntent.putExtra(EditActivity.INTENT_DATA, mList.get(position).getText());
+                //押されたアイテムの場所をEdit_Activityに送る
                 mIntent.putExtra(EditActivity.INTENT_POSITION, position);
+                //現在の背景色をEdit_Activityに送る
                 mIntent.putExtra(EditActivity.INTENT_COLOR, mList.get(position).getColor());
                 int requestCode = RESULT_EDITACTIVITY;
                 startActivityForResult(mIntent,requestCode);
@@ -146,12 +149,18 @@ public class MainActivity extends AppCompatActivity {
         int pos;
         int color;
         if (resultCode == RESULT_OK && requestCode == RESULT_EDITACTIVITY && null != data) {
+            //Edit_Activityから送られたテキストデータを受け取る
             res = data.getStringExtra(EditActivity.INTENT_RESULT);
+            //押されたアイテムの場所のポジションを受け取る
             pos = data.getIntExtra(EditActivity.INTENT_POSITION, 0);
+            //Edit_Activityから送られた背景色を受け取る
             color = data.getIntExtra(EditActivity.INTENT_COLOR, 0);
             Log.d("color","ok: " + color);
+            //テキストの反映
             mList.get(pos).setText(res);
+            //色の反映
             mList.get(pos).setColor(color);
+            //更新
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -180,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 textTextView.setTextColor(getResources().getColor(R.color.black));
             }
             if(getItem(position).getColor() != 0) {
+                //Edit_Activityから送られてきた背景色のデータが０じゃなければ色を変更
                 convertView.setBackgroundColor(getItem(position).getColor());
             }
             return convertView;
