@@ -11,11 +11,13 @@ public class Item {
     private String text;
     private String date;
     private Boolean isCheck;
+    private int color;
 
-    public Item(String text, String date) {
+    public Item(String text, String date, int color) {
         this.text = text;
         this.date = date;
         this.isCheck = false;
+        this.color = color;
     }
 
     public void setText(String text) {
@@ -24,8 +26,10 @@ public class Item {
     public void setIsCheck(Boolean isCheck){
         this.isCheck = isCheck;
     }
+    public void setColor(int color) {this.color = color; }
 
     public String getText() {return text;}
     public String getDate() {return  date;}
     public Boolean getIsCheck(){return  isCheck;}
+    public int getColor() {return  color;}
 }

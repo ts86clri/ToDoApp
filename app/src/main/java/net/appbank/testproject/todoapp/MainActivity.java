@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat mSimpleDateFormat;
     //遷移の取得
     Intent mIntent;
-    Color mColor;
     static final  int RESULT_EDITACTIVITY = 100;
 
 
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.button);
         //mListView取得
         mListView = (ListView)findViewById(R.id.listview);
+        //読み書き可能
         mListView.setChoiceMode(mListView.CHOICE_MODE_MULTIPLE);
         //ArrayAdapterの生成
         mAdapter = new ItemAdapter(this, mList);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mIntent = new Intent(MainActivity.this,EditActivity.class);
 
         //テストデータ
-        mList.add(new Item("hoge", mSimpleDateFormat.format(mDate)));
+        mList.add(new Item("hoge", mSimpleDateFormat.format(mDate), 0));
         //リストのアイテムを押した時の処理
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -101,10 +101,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.d("log","ok");
-                mIntent.putExtra("data", mList.get(position).getText());
-                mIntent.putExtra("position", position);
+                mIntent.putExtra(EditActivity.INTENT_DATA, mList.get(position).getText());
+                mIntent.putExtra(EditActivity.INTENT_POSITION, position);
+                mIntent.putExtra(EditActivity.INTENT_COLOR, mList.get(position).getColor());
                 int requestCode = RESULT_EDITACTIVITY;
                 startActivityForResult(mIntent,requestCode);
+
                 return false;
             }
         });
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     //更新処理
     private void addStringData() {
         //EditTextのテキストを取得
-        mList.add(new Item(mEditText.getText().toString(), mSimpleDateFormat.format(mDate)));
+        mList.add(new Item(mEditText.getText().toString(), mSimpleDateFormat.format(mDate), 0));
         //更新の反映
         mAdapter.notifyDataSetChanged();
         //EditTextの中身の削除
@@ -142,11 +144,14 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         String res;
         int pos;
+        int color;
         if (resultCode == RESULT_OK && requestCode == RESULT_EDITACTIVITY && null != data) {
-            res = data.getStringExtra("RESULT");
-            pos = data.getIntExtra("position", 0);
+            res = data.getStringExtra(EditActivity.INTENT_RESULT);
+            pos = data.getIntExtra(EditActivity.INTENT_POSITION, 0);
+            color = data.getIntExtra(EditActivity.INTENT_COLOR, 0);
+            Log.d("color","ok: " + color);
             mList.get(pos).setText(res);
-
+            mList.get(pos).setColor(color);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -173,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 dateTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                 textTextView.setTextColor(getResources().getColor(R.color.black));
+            }
+            if(getItem(position).getColor() != 0) {
+                convertView.setBackgroundColor(getItem(position).getColor());
             }
             return convertView;
         }

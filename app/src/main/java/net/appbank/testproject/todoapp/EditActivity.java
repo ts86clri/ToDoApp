@@ -22,6 +22,11 @@ import android.widget.Toast;
  * Created by tatsuya.sato on 2016/08/29.
  */
 public class EditActivity extends AppCompatActivity {
+    public final static String INTENT_COLOR = "color";
+    public final static String INTENT_POSITION = "positon";
+    public final static String INTENT_RESULT = "result";
+    public final static String INTENT_DATA = "data";
+
     EditText mEditText;
     Intent mIntent;
     CheckBox mCheckBoxRed;
@@ -32,6 +37,7 @@ public class EditActivity extends AppCompatActivity {
     int ActionId;
     String data;
     int mPosition;
+    int mColor;
     static final  int RESULT_EDITACTIVITY = 100;
 
     @Override
@@ -47,8 +53,9 @@ public class EditActivity extends AppCompatActivity {
         mCheckBoxBlue = (CheckBox) findViewById(R.id.CheckBoxBlue);
         mCheckBoxYellow = (CheckBox) findViewById(R.id.CheckBoxYellow);
         mIntent = getIntent();
-        data = mIntent.getStringExtra("data");
-        mPosition = mIntent.getIntExtra("position",0);
+        data = mIntent.getStringExtra(INTENT_DATA);
+        mPosition = mIntent.getIntExtra(INTENT_POSITION,0);
+        mColor = mIntent.getIntExtra(INTENT_COLOR,0);
         mEditText.setText(data);
         mSaveButton = (Button) findViewById(R.id.SaveButton);
         mCheckBoxWhite.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +66,8 @@ public class EditActivity extends AppCompatActivity {
                     mCheckBoxBlue.setChecked(false);
                     mCheckBoxYellow.setChecked(false);
                     mEditText.setBackgroundColor(Color.WHITE);
+                    mColor = Color.WHITE;
+                    mEditText.setText(mColor);
                 }
             }
         });
@@ -70,6 +79,7 @@ public class EditActivity extends AppCompatActivity {
                     mCheckBoxBlue.setChecked(false);
                     mCheckBoxYellow.setChecked(false);
                     mEditText.setBackgroundColor(Color.RED);
+                    mColor = Color.RED;
                 }
             }
         });
@@ -81,6 +91,7 @@ public class EditActivity extends AppCompatActivity {
                     mCheckBoxWhite.setChecked(false);
                     mCheckBoxYellow.setChecked(false);
                     mEditText.setBackgroundColor(Color.BLUE);
+                    mColor = Color.BLUE;
                 }
             }
         });
@@ -92,14 +103,16 @@ public class EditActivity extends AppCompatActivity {
                     mCheckBoxBlue.setChecked(false);
                     mCheckBoxWhite.setChecked(false);
                     mEditText.setBackgroundColor(Color.YELLOW);
+                    mColor = Color.YELLOW;
                 }
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mIntent.putExtra("RESULT", mEditText.getText().toString());
-                mIntent.putExtra("position", mPosition);
+                mIntent.putExtra(INTENT_RESULT , mEditText.getText().toString());
+                mIntent.putExtra(INTENT_COLOR, mColor);
+                mIntent.putExtra(INTENT_POSITION, mPosition);
                 setResult(RESULT_OK, mIntent);
                 finish();
             }
@@ -119,6 +132,4 @@ public class EditActivity extends AppCompatActivity {
         }
         return  result;
     }
-
-
 }
