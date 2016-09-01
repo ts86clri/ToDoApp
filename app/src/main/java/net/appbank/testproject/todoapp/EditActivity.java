@@ -34,10 +34,11 @@ public class EditActivity extends AppCompatActivity {
     CheckBox mCheckBoxYellow;
     CheckBox mCheckBoxWhite;
     Button mSaveButton;
-    int ActionId;
-    String data;
+    int mActionId;
+    String mTextdata;
     int mPosition;
     int mColor;
+    SharedPreferences mPref;
     static final  int RESULT_EDITACTIVITY = 100;
 
     @Override
@@ -48,15 +49,15 @@ public class EditActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mEditText = (EditText) findViewById(R.id.edittext);
         mIntent = new Intent(EditActivity.this, MainActivity.class);
-        mCheckBoxWhite = (CheckBox) findViewById(R.id.CheckBoxWhite);
-        mCheckBoxRed = (CheckBox) findViewById(R.id.CheckBoxRed);
-        mCheckBoxBlue = (CheckBox) findViewById(R.id.CheckBoxBlue);
-        mCheckBoxYellow = (CheckBox) findViewById(R.id.CheckBoxYellow);
+        mCheckBoxWhite = (CheckBox) findViewById(R.id.white_check_Box);
+        mCheckBoxRed = (CheckBox) findViewById(R.id.red_check_box);
+        mCheckBoxBlue = (CheckBox) findViewById(R.id.blue_check_box);
+        mCheckBoxYellow = (CheckBox) findViewById(R.id.yellow_check_box);
         mIntent = getIntent();
-        data = mIntent.getStringExtra(INTENT_DATA);
+        mTextdata = mIntent.getStringExtra(INTENT_DATA);
         mPosition = mIntent.getIntExtra(INTENT_POSITION,0);
         mColor = mIntent.getIntExtra(INTENT_COLOR,0);
-        mEditText.setText(data);
+        mEditText.setText(mTextdata);
         mSaveButton = (Button) findViewById(R.id.SaveButton);
         mCheckBoxWhite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +66,8 @@ public class EditActivity extends AppCompatActivity {
                     mCheckBoxRed.setChecked(false);
                     mCheckBoxBlue.setChecked(false);
                     mCheckBoxYellow.setChecked(false);
-                    mEditText.setBackgroundColor(Color.WHITE);
-                    mColor = Color.WHITE;
-                    mEditText.setText(mColor);
+                    mEditText.setBackgroundColor(Color.TRANSPARENT);
+                    mColor = Color.TRANSPARENT;
                 }
             }
         });
@@ -114,16 +114,23 @@ public class EditActivity extends AppCompatActivity {
                 mIntent.putExtra(INTENT_COLOR, mColor);
                 mIntent.putExtra(INTENT_POSITION, mPosition);
                 setResult(RESULT_OK, mIntent);
+                saveText();
                 finish();
+                Log.d("finish","ok");
             }
         });
     }
 
+    private void saveText() {
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mPref.edit().putString("text",mEditText.getText().toString()).commit();
+    }
+
     @Override
     public  boolean onOptionsItemSelected(MenuItem item) {
-        ActionId = item.getItemId();
+        mActionId = item.getItemId();
         boolean result = true;
-        switch (ActionId){
+        switch (mActionId){
             case android.R.id.home:
                 finish();
                 break;

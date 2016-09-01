@@ -2,6 +2,7 @@ package net.appbank.testproject.todoapp.model;
 
 import android.graphics.Color;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,11 +14,15 @@ public class Item {
     private Boolean isCheck;
     private int color;
 
-    public Item(String text, String date, int color) {
+    public Item(String text, String date, int color, Boolean isCheck) {
         this.text = text;
         this.date = date;
-        this.isCheck = false;
+        this.isCheck = isCheck;
         this.color = color;
+    }
+
+    public Item(String text, String date, int color) {
+        this(text, date, color, false);
     }
 
     public void setText(String text) {
@@ -32,4 +37,11 @@ public class Item {
     public String getDate() {return  date;}
     public Boolean getIsCheck(){return  isCheck;}
     public int getColor() {return  color;}
+
+    public String toString() {
+        return "text:"+this.text+","+
+               "date:"+this.date+","+
+               "isCheck:"+this.isCheck+","+
+               "color:"+this.color;
+    }
 }

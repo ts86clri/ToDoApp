@@ -1,6 +1,7 @@
 package net.appbank.testproject.todoapp;
 
 import android.accessibilityservice.GestureDescription;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,12 +31,17 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import net.appbank.testproject.todoapp.model.Item;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     //Listの準備
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     //遷移の取得
     Intent mIntent;
     static final  int RESULT_EDITACTIVITY = 100;
-
+    SharedPreferences mPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView)findViewById(R.id.listview);
         //読み書き可能
         mListView.setChoiceMode(mListView.CHOICE_MODE_MULTIPLE);
+        mPref = getSharedPreferences("List",MODE_PRIVATE);
+        // TODO: 2016/09/01 ここでloadする
+        mList = loadData();
         //ArrayAdapterの生成
         mAdapter = new ItemAdapter(this, mList);
         //listにadapterをセット
@@ -83,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         mSimpleDateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日'HH:mm");
         //遷移の準備
         mIntent = new Intent(MainActivity.this,EditActivity.class);
-
         //テストデータ
         mList.add(new Item("hoge", mSimpleDateFormat.format(mDate), 0));
         //リストのアイテムを押した時の処理
@@ -146,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String res;
-        int pos;
         int color;
+        int pos;
         if (resultCode == RESULT_OK && requestCode == RESULT_EDITACTIVITY && null != data) {
             //Edit_Activityから送られたテキストデータを受け取る
             res = data.getStringExtra(EditActivity.INTENT_RESULT);
@@ -162,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             mList.get(pos).setColor(color);
             //更新
             mAdapter.notifyDataSetChanged();
+            saveData();
         }
     }
 
@@ -194,5 +203,54 @@ public class MainActivity extends AppCompatActivity {
             }
             return convertView;
         }
+    }
+    public void saveData() {
+        JSONArray array = new JSONArray();
+        for (int i = 0; i < mList.size(); i++) {
+            try {
+                JSONObject object = new JSONObject();
+                object.put("text", mList.get(i).getText());
+                object.put("date", mList.get(i).getDate());
+                object.put("color", mList.get(i).getColor());
+                object.put("isCheck", mList.get(i).getIsCheck());
+
+                array.put(i, object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        mPref.edit().putString("test",array.toString()).commit();
+        mPref.getString("test","");
+        Log.d("mPref", mPref.getString("test",""));
+    }
+
+    public List<Item> loadData() {
+        List<Item> list = new ArrayList<>();
+        String data = mPref.getString("test","[]");
+        JSONArray array = null;
+        try {
+            array = new JSONArray(data);
+        } catch (JSONException e) {
+            return list;
+        }
+
+        for (int i = 0; i < array.length(); i++ ) {
+            Item item;
+            try {
+                JSONObject object = array.getJSONObject(i);
+                String text = object.getString("text");
+                String date = object.getString("date");
+                int color = object.getInt("color");
+                Boolean isCheck = object.getBoolean("isCheck");
+                item = new Item(text, date, color, isCheck);
+
+            } catch (JSONException e) {
+                item = new Item("", "", 0, false);
+            }
+
+            list.add(item);
+        }
+        Log.d("data", data );
+        return list;
     }
 }
